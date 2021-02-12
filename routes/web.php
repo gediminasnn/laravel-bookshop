@@ -17,8 +17,18 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/home', [\App\Http\Controllers\HomeController::class, 'show'] );
+
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
+
+Route::get('/greeting', function () {
+    return "Hello World!";
+});
+
+Route::get('/user/{name?}', function ($name = 'John') {
+    return $name;
+});
 
 require __DIR__.'/auth.php';
