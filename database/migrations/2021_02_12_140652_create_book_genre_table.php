@@ -14,8 +14,8 @@ class CreateBookGenreTable extends Migration
     public function up()
     {
         Schema::create('book_genre', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+            $table->foreignId('book_id')->constrained();
+            $table->foreignId('genre_id')->constrained();
         });
     }
 
