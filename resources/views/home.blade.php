@@ -1,18 +1,134 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <title>tp_projektas</title>
-</head>
+<x-customlayout>
+    <div class="control-group bg-light rounded">
 
-<body>
-Hello World!
-@foreach ($users as $user)
-    <p>This is user {{ $user->id }}</p>
-@endforeach
-</body>
-</html>
+{{--        5 book row--}}
+        <div class="row">
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+        </div>
+
+        {{--        5 book row--}}
+        <div class="row">
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+
+            <div class="col m-1">
+                <a href="">
+                    <img src="{{URL::asset('/images/IMG_20210206_152320.jpg')}}" alt="">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">Title : Hakingas</li>
+                        <li class="list-group-item">Author : Stephen Hawking</li>
+                        <li class="list-group-item">Price : 420.0$</li>
+                    </ul>
+                </a>
+            </div>
+        </div>
+
+{{--        Pagination --}}
+        <nav aria-label="Page navigation example" >
+            <ul class="pagination justify-content-end" >
+                <li class="page-item"><a class="page-link" href="#"><</a></li>
+                <li class="page-item"><a class="page-link" href="#">></a></li>
+            </ul>
+        </nav>
+
+    Hello World!
+    @foreach ($users as $user)
+        <p>This is user {{ $user->id }}</p>
+    @endforeach
+    </div>
+</x-customlayout>
+
