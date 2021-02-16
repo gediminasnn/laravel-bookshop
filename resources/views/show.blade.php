@@ -1,4 +1,10 @@
-<x-customlayout>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Book details
+        </h2>
+    </x-slot>
+
     <div class="control-group rounded">
 
         <div class="row">
@@ -43,5 +49,5 @@
         <button type="button" class="btn btn-primary">Primary</button>
 
     </div>
-</x-customlayout>
+</x-app-layout>
 

@@ -1,4 +1,9 @@
-<x-customlayout>
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Book listing
+        </h2>
+    </x-slot>
     <div class="control-group rounded">
 
         <div class="row">
@@ -77,5 +82,5 @@
         <p>This is user {{ $user->id }}</p>
     @endforeach
     </div>
-</x-customlayout>
+</x-app-layout>
 

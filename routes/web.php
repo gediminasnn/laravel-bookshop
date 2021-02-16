@@ -20,6 +20,10 @@ Route::get('/', function () {
 
 Route::get('/books', [BookController::class, 'index'] );
 
+Route::get('/books/create', [BookController::class, 'create'] )->middleware('auth');
+
+Route::post('/books/create', [BookController::class, 'store'] )->name('book.store')->middleware('auth');
+
 Route::get('/books/{id}', [BookController::class, 'show'] );
 
 Route::get('/dashboard', function () {
