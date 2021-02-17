@@ -5,6 +5,9 @@ module.exports = {
 
     theme: {
         extend: {
+            colors: {
+                'amazon-orange' : '#C7511F',
+            },
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
