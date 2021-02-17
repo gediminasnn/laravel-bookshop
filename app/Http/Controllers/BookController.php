@@ -15,7 +15,7 @@ class BookController extends Controller
      */
     public function index()
     {
-        return response()->view('index', ['users' => User::all()]);
+        return response()->view('books.index', ['users' => User::all()]);
     }
 
 
@@ -48,7 +48,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        return response()->view('show', ['user' => User::query()->find($id)]);
+        return response()->view('books.show', ['user' => User::query()->find($id)]);
     }
 
     /**

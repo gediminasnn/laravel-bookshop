@@ -15,27 +15,21 @@ use App\Http\Controllers\BookController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect('/books');
 });
 
-Route::get('/books', [BookController::class, 'index'] );
+Route::get('/books', [BookController::class, 'index'] )->name('books');
 
-Route::get('/books/create', [BookController::class, 'create'] )->middleware('auth');
+Route::get('/books/create', [BookController::class, 'create'] )->middleware('auth')->name('books.create');
 
-Route::post('/books/create', [BookController::class, 'store'] )->name('book.store')->middleware('auth');
+Route::post('/books/create', [BookController::class, 'store'] )->middleware('auth')->name('book.store');
 
-Route::get('/books/{id}', [BookController::class, 'show'] );
+Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('user.dashboard');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('/greeting', function () {
-    return "Hello World!";
-});
 
-Route::get('/user/{name?}', function ($name = 'John') {
-    return $name;
-});
 
 require __DIR__.'/auth.php';
