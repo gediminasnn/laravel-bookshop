@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,30 @@ class BookController extends Controller
      */
     public function store(Request $request)
     {
-        echo $request->input('title');
+        $request->validate([
+           'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+        ]);
+
+        $fileName = null;
+        if($request->hasFile('file-upload'))
+        {
+            $fileName = time().'.'.$request->file('file-upload')->getClientOriginalExtension();
+            echo $fileName;
+            $request->file('file-upload')->move(public_path('images'),$fileName);
+        }
+
+        $book = new Book();
+
+        $book->title = $request->title;
+        $book->price = $request->price;
+        $book->discount = $request->discount;
+        $book->description = $request->description;
+        $book->cover = $fileName;
+
+        $book->save();
+
+        return redirect()->back()->with('message', 'IT WORKS!');
+
     }
 
     /**
