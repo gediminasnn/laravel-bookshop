@@ -14,9 +14,15 @@ class BookController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        return response()->view('books.index', ['users' => User::all()]);
+        $currentPage = 1;
+        if($request->input('page')){
+            $currentPage = $request->input('page');
+        }
+
+        $books = Book::all();
+        return response()->view('books.index', ['books' => Book::all(), 'previousPage' => $currentPage-1, 'nextPage' => $currentPage+1]);
     }
 
 
@@ -51,20 +57,21 @@ class BookController extends Controller
         }
 
         $book = new Book();
-
         $book->title = $request->title;
         $book->price = $request->price;
-        $book->discount = $request->discount;
+        if($request->has('discount'))
+        {
+            $book->discount = $request->discount;
+        }
         $book->description = $request->description;
         $book->cover = $fileName;
-
         $book->save();
 
         return redirect()->back()->with('message', 'IT WORKS!');
 
     }
 
-    /**
+    /**m
      * Display the specified resource.
      *
      * @param  int  $id
@@ -72,7 +79,7 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        return response()->view('books.show', ['user' => User::query()->find($id)]);
+        return response()->view('books.showw', ['book' => Book::query()->find($id)]);
     }
 
     /**
