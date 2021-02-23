@@ -27,7 +27,7 @@ Route::post('/books/create', [BookController::class, 'store'] )->middleware('aut
 Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
 
 Route::get('/dashboard', function () {
-    return view('user.dashboard');
+    return view('user.my-books');
 })->middleware(['auth'])->name('dashboard');
 
 
