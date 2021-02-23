@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 
 class BookController extends Controller
@@ -17,12 +18,18 @@ class BookController extends Controller
     public function index(Request $request)
     {
         $currentPage = 1;
-        if($request->input('page')){
+        if ($request->input('page')) {
             $currentPage = $request->input('page');
         }
 
         $books = Book::all();
-        return response()->view('books.index', ['books' => Book::all(), 'previousPage' => $currentPage-1, 'nextPage' => $currentPage+1]);
+        return response()->view('books.index',
+                                [
+                                    'books' => Book::all(),
+                                    'previousPage' => $currentPage - 1,
+                                    'nextPage' => $currentPage + 1
+                                ]
+        );
     }
 
 
@@ -39,53 +46,53 @@ class BookController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $request->validate([
-           'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
-        ]);
+        $request->validate(
+            [
+                'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]
+        );
 
         $fileName = null;
-        if($request->hasFile('file-upload'))
-        {
-            $fileName = time().'.'.$request->file('file-upload')->getClientOriginalExtension();
+        if ($request->hasFile('file-upload')) {
+            $fileName = time() . '.' . $request->file('file-upload')->getClientOriginalExtension();
             echo $fileName;
-            $request->file('file-upload')->move(public_path('images'),$fileName);
+            $request->file('file-upload')->move(public_path('images'), $fileName);
         }
 
         $book = new Book();
         $book->title = $request->title;
         $book->price = $request->price;
-        if($request->has('discount'))
-        {
+        if ($request->has('discount')) {
             $book->discount = $request->discount;
         }
         $book->description = $request->description;
         $book->cover = $fileName;
+        $book->user_id = Auth::user()->id;
         $book->save();
 
         return redirect()->back()->with('message', 'IT WORKS!');
-
     }
 
     /**m
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-        return response()->view('books.showw', ['book' => Book::query()->find($id)]);
+        return response()->view('books.show', ['book' => Book::query()->find($id)]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -96,8 +103,8 @@ class BookController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -108,7 +115,7 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
