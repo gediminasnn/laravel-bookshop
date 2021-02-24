@@ -82,17 +82,6 @@ class BookController extends Controller
             'cover' => $fileName
             ]);
 
-//        $book->title = $request->title;
-//        $book->price = $request->price;
-//        if ($request->has('discount')) {
-//            $book->discount = $request->discount;
-//        }
-//        $book->description = $request->description;
-//        $book->cover = $fileName;
-//        $book->user_id = Auth::user()->id;
-//        $book->save();
-//
-
         $authors = explode(",", $request->author);
         $author_id = [];
         foreach($authors as $author) {
@@ -112,7 +101,8 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        return response()->view('books.show', ['book' => Book::query()->find($id)]);
+        $genres = Genre::all();
+        return response()->view('books.show', ['book' => Book::query()->find($id), 'genres' => $genres]);
     }
 
     /**
@@ -123,7 +113,23 @@ class BookController extends Controller
      */
     public function edit($id)
     {
-        //
+        $books = Book::find($id);
+
+        $genres = Genre::all();
+        $bookGenres = $books->genres->pluck('id')->toArray();
+
+        $authors = Author::all();
+        $bookAuthors = $books->authors->pluck('name')->toArray();
+
+        $bookAuthors = implode(",", $bookAuthors);
+
+        return response()->view('books.edit', [
+            'book' => $books,
+            'genres' => $genres,
+            'bookGenres' => $bookGenres,
+            'authors' => $authors,
+            'bookAuthors' => $bookAuthors
+        ]);
     }
 
     /**
@@ -133,9 +139,53 @@ class BookController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update($id, Request $request)
     {
-        //
+        $book = Book::find($id);
+//        dd($book);
+
+        if(Auth::user()->id !== $book->user_id)
+        {
+            return redirect()->back()->with('message', 'You dont have access to change this book !');
+        }
+
+        $request->validate(
+            [
+                'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
+            ]
+        );
+
+        $fileName = $book->cover;
+        if ($request->hasFile('file-upload')) {
+            $fileName = time() . '.' . $request->file('file-upload')->getClientOriginalExtension();
+            echo $fileName;
+            $request->file('file-upload')->move(public_path('images'), $fileName);
+        }
+
+        $discount = $book->discount;
+        if ($request->has('discount')) {
+            $discount = $request->discount;
+        }
+
+
+        $book->update([
+            'title' => $request->title,
+            'price' => $request->price,
+            'discount' => $discount,
+            'description' => $request->description,
+            'user_id' => Auth::user()->id,
+            'cover' => $fileName
+        ]);
+
+        $authors = explode(",", $request->author);
+        $author_id = [];
+        foreach($authors as $author) {
+            $author_id[] = Author::updateOrCreate(['name' => $author])->id;
+        }
+        $book->genres()->sync($request->genre);
+        $book->authors()->sync($author_id);
+
+        return redirect()->back()->with('message', 'Updated!');
     }
 
     /**
