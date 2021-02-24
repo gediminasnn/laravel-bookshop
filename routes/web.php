@@ -27,6 +27,13 @@ Route::post('/books/create', [BookController::class, 'store'] )->middleware('aut
 
 Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
 
+Route::post('/books/{id}', [BookController::class, 'destroy'] )->name('books.destroy');
+
+Route::get('/books/{id}/edit', [BookController::class, 'edit'] )->name('books.edit');
+
+Route::post('/books/{id}/edit', [BookController::class, 'update'] )->name('books.update');
+
+
 
 Route::get('/dashboard', function () {
     return redirect('/dashboard/my-books');
@@ -37,6 +44,8 @@ Route::get('/dashboard/my-books',[DashboardController::class, 'myBooks'])->middl
 Route::get('/dashboard/my-comments',[DashboardController::class, 'myComments'])->middleware(['auth'])->name('dashboard.my-comments');
 
 Route::get('/dashboard/report-a-book',[DashboardController::class, 'reportABook'])->middleware(['auth'])->name('dashboard.report-a-book');
+
+Route::get('/dashboard/my-reports',[DashboardController::class, 'myReports'])->middleware(['auth'])->name('dashboard.my-reports');
 
 Route::get('/dashboard/change-email',[DashboardController::class, 'changeEmail'])->middleware(['auth'])->name('dashboard.change-email');
 
