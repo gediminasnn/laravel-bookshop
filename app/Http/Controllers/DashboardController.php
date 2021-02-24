@@ -29,6 +29,12 @@ class DashboardController extends Controller
         return response()->view('dashboard.my-comments');
     }
 
+    public function myReports(Request $request)
+    {
+        $myBooks = Book::all()->where('user_id', Auth::user()->id);
+        return response()->view('dashboard.my-reports',['books' => $myBooks]);
+    }
+
     /**
      * Display all books by logged in dashboard id.
      *
