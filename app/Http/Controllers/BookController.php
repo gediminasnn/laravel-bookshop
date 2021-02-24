@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Author;
 use App\Models\Book;
+use App\Models\Genre;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +42,8 @@ class BookController extends Controller
      */
     public function create()
     {
-        return response()->view('books.create');
+        $genres = Genre::all();
+        return response()->view('books.create', ['genres' => $genres]);
     }
 
     /**
@@ -64,16 +67,39 @@ class BookController extends Controller
             $request->file('file-upload')->move(public_path('images'), $fileName);
         }
 
-        $book = new Book();
-        $book->title = $request->title;
-        $book->price = $request->price;
+        $discount = null;
         if ($request->has('discount')) {
-            $book->discount = $request->discount;
+            $discount = $request->discount;
         }
-        $book->description = $request->description;
-        $book->cover = $fileName;
-        $book->user_id = Auth::user()->id;
-        $book->save();
+
+
+        $book = Book::create([
+            'title' => $request->title,
+            'price' => $request->price,
+            'discount' => $discount,
+            'description' => $request->description,
+            'user_id' => Auth::user()->id,
+            'cover' => $fileName
+            ]);
+
+//        $book->title = $request->title;
+//        $book->price = $request->price;
+//        if ($request->has('discount')) {
+//            $book->discount = $request->discount;
+//        }
+//        $book->description = $request->description;
+//        $book->cover = $fileName;
+//        $book->user_id = Auth::user()->id;
+//        $book->save();
+//
+
+        $authors = explode(",", $request->author);
+        $author_id = [];
+        foreach($authors as $author) {
+            $author_id[] = Author::updateOrCreate(['name' => $author])->id;
+        }
+        $book->genres()->sync($request->genre);
+        $book->authors()->sync($author_id);
 
         return redirect()->back()->with('message', 'IT WORKS!');
     }

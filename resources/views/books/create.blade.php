@@ -55,21 +55,25 @@
                             </div>
 
                             <div class="col-span-6 sm:row-start-3 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Author</label>
-                                <select name="author" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-{{--                                    <option>Zac Muckerberg</option>--}}
-{{--                                    <option>Canada</option>--}}
-{{--                                    <option>Mexico</option>--}}
-                                </select>
+                                <label class="block text-sm font-medium text-gray-700">Authors</label>
+                                <input placeholder="J. K. Rowling, William Shakespeare, Agatha Christie,..." type="text" name="author" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
 
+{{--                            TODO: fix div height if genres alot--}}
                             <div class="col-span-6 sm:row-start-4 sm:col-span-3">
-                                <label class="block text-sm font-medium text-gray-700">Genre</label>
-                                <select name="genre" class="block w-full px-3 py-2 mt-1 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-{{--                                    <option>Drama</option>--}}
-{{--                                    <option>Canada</option>--}}
-{{--                                    <option>Mexico</option>--}}
-                                </select>
+                                <span class="text-gray-700">Genres</span>
+                                <div class="mt-2">
+                                    @forelse($genres as $genre)
+                                        <div>
+                                            <label class="inline-flex items-center">
+                                                <input type="checkbox" class="form-checkbox" name="genre[]" value="{{$genre->id}}">
+                                                <span class="ml-2">{{$genre->name}}</span>
+                                            </label>
+                                        </div>
+                                    @empty
+                                        There are no genres available
+                                    @endforelse
+                                </div>
                             </div>
 
                             <div class="col-span-6 sm:col-span-4">
