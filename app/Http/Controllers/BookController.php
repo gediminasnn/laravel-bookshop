@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\Genre;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -101,8 +102,18 @@ class BookController extends Controller
      */
     public function show($id)
     {
-        $genres = Genre::all();
-        return response()->view('books.show', ['book' => Book::query()->find($id), 'genres' => $genres]);
+
+        $reviews = Review::all()->where('book_id', $id);
+        $starsArray = $reviews->pluck('stars')->toArray();
+        $average = round(array_sum($starsArray) / count($starsArray), 2);
+
+//        dd($reviews->user());
+
+        return response()->view('books.show', [
+            'book' => Book::find($id),
+            'reviews' => $reviews,
+            'stars' => $average,
+        ]);
     }
 
     /**
