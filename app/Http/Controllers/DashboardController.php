@@ -13,7 +13,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function myBooks(Request $request)
+    public function myBooks()
     {
         $myBooks = Book::all()->where('user_id', Auth::user()->id);
         return response()->view('dashboard.my-books',['books' => $myBooks]);
@@ -24,15 +24,15 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function myComments()
+    public function myReviews()
     {
-        return response()->view('dashboard.my-comments');
+        $myReviews = Review::all()->where('user_id', Auth::user()->id);
+        return response()->view('dashboard.my-reviews',['reviews' => $myReviews]);
     }
 
     public function myReports(Request $request)
     {
-        $myBooks = Book::all()->where('user_id', Auth::user()->id);
-        return response()->view('dashboard.my-reports',['books' => $myBooks]);
+        return response()->view('dashboard.my-reports');
     }
 
     /**
