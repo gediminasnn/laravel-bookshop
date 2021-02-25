@@ -46,22 +46,27 @@
                         <hr>
                         <p>
                             <span class="text-2xl font-medium text-gray-700">Author</span>
-                            <span class="class=inline-block px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
-                            <span class="class=inline-block px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
-                            <span class="class=inline-block px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
+                            @forelse($book->authors->pluck('name')->toArray() as $author)
+                                <span class="class=inline-block px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">{{$author}}</span>
+                            @empty
+                            : none
+                            @endforelse
+
                         </p>
 
 
                         <p>
                             <span class="text-xl font-medium text-gray-700">Genre</span>
-                            <span class="class=inline-block text-xs px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
-                            <span class="class=inline-block text-xs px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
-                            <span class="class=inline-block text-xs px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">Jon Bomnori</span>
+                            @forelse($book->genres->pluck('name')->toArray() as $genre)
+                                <span class="class=inline-block text-xs px-2 font-medium text-blue-700 transition bg-transparent border-2 border-blue-700 rounded-full shadow ripple focus:outline-none">{{$genre}}</span>
+                            @empty
+                                : none
+                            @endforelse
                         </p>
 
-                        <p><span class="font-medium text-gray-700">Rating : 4.7/5</span></p>
+                        <p><span class="font-medium text-gray-700">Rating : {{$stars}}/5</span></p>
 
-                        <p class="pt-10 pr-5 text-xl">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+                        <p class="pt-10 pr-5 text-xl">{{$book->description}}</p>
                     </div>
 
                 </div>
@@ -69,18 +74,42 @@
 
                 <div class="p-10 bg-white border-b border-gray-200">
                     <label for="first_name" class="block text-3xl font-medium text-gray-700">Reviews</label>
-                    <hr>
 
-                    <p class="py-2">
-                        <span class="text-xl px-2 border-gray-700 rounded-full shadow ripple border-2">Tom Hardy</span>
-                    </p>
-                    <p class="pr-5 pb-2 text-xl">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-                    <hr>
+                    @forelse($reviews as $review)
+                    <div class="py-4">
+                        <p class="py-2">
+                            <span class="text-xl px-2 border-gray-700 rounded-full shadow ripple border-2">{{$review->user->name}}</span>
+                            Stars : {{$review->stars}}
 
+                        @if($review->user_id === auth()->user()->id)
 
+                            <div class="flex justify-start space-x-1">
+                                <a href="{{route("reviews.edit", $review->id)}}" class="border-2 border-indigo-200 rounded-md p-1">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4 text-gray-500">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                                    </svg>
+                                </a>
+                                <form method="POST" action="{{route("reviews.destroy", $review->id)}}">
+                                    <button type="submit" class="border-2 border-red-200 rounded-md p-1">
+                                        @csrf
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4 text-red-500">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                        </p>
+                        <p class="pr-5 pb-2 text-xl">{{$review->comment}}</p>
+                        <hr>
+                    </div>
+                    @empty
+                        <p class="pr-5 pb-2 text-xl">There are no reviews yet</p>
+
+                @endforelse
                     <!-- Comment section -->
                     <div class="col-span-6 sm:col-span-4">
-                        <form method="POST" action="#">
+                        <form method="POST" action="{{route('reviews.store', ['id' =>$book->id])}}">
                         @csrf
 
 
@@ -88,19 +117,19 @@
 
                                 <div class="flex inline-flex items-center">
 
-                                    <input type="radio" class="form-radio" name="rating" value="1">
+                                    <input type="radio" class="form-radio" name="star" value="1">
                                     <span class="mx-1">1</span>
 
-                                    <input type="radio" class="form-radio" name="rating" value="2">
+                                    <input type="radio" class="form-radio" name="star" value="2">
                                     <span class="mx-1">2</span>
 
-                                    <input type="radio" class="form-radio" name="rating" value="3">
+                                    <input type="radio" class="form-radio" name="star" value="3">
                                     <span class="mx-1">3</span>
 
-                                    <input type="radio" class="form-radio" name="rating" value="4">
+                                    <input type="radio" class="form-radio" name="star" value="4">
                                     <span class="mx-1">4</span>
 
-                                    <input type="radio" class="form-radio" name="rating" value="5">
+                                    <input type="radio" class="form-radio" name="star" value="5">
                                     <span class="mx-1">5</span>
 
                                 </div>
