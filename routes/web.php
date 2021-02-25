@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ReviewController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,13 +36,23 @@ Route::post('/books/{id}/edit', [BookController::class, 'update'] )->name('books
 
 
 
+Route::get('/reviews/{id}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
+
+Route::post('/reviews/{id}/edit', [ReviewController::class, 'update'])->name('reviews.update');
+
+Route::post('/reviews/create', [ReviewController::class, 'store'])->name('reviews.store');
+
+Route::post('/reviews/{id}', [ReviewController::class, 'destroy'] )->name('reviews.destroy');
+
+
+
 Route::get('/dashboard', function () {
     return redirect('/dashboard/my-books');
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('/dashboard/my-books',[DashboardController::class, 'myBooks'])->middleware(['auth'])->name('dashboard.my-books');
 
-Route::get('/dashboard/my-comments',[DashboardController::class, 'myComments'])->middleware(['auth'])->name('dashboard.my-comments');
+Route::get('/dashboard/my-reviews',[DashboardController::class, 'myReviews'])->middleware(['auth'])->name('dashboard.my-reviews');
 
 Route::get('/dashboard/report-a-book',[DashboardController::class, 'reportABook'])->middleware(['auth'])->name('dashboard.report-a-book');
 
