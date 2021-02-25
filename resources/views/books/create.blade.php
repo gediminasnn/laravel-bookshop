@@ -37,9 +37,15 @@
                 @csrf
                 <div class="overflow-hidden shadow rounded-md">
                     <div class="px-4 py-5 bg-white sm:p-6">
+
+
                         <div class="grid grid-cols-4 gap-6">
 
+
+
+
                             <div class="col-span-6 sm:col-span-3">
+                                <x-a href="{{route('dashboard')}}" class="mb-5">Dashboard</x-a>
                                 <label for="first_name" class="block text-sm font-medium text-gray-700">Title</label>
                                 <input type="text" name="title" class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                             </div>
@@ -107,12 +113,15 @@
 
 
                         </div>
+
                     </div>
-                    <div class="px-4 py-3 text-right bg-gray-50 sm:px-6">
-                        <button type="submit" class="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-indigo-600 border border-transparent rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+
+                    <div class="px-4 py-3 bg-white text-right sm:px-6">
+                        <x-button>
                             Add
-                        </button>
+                        </x-button>
                     </div>
+
                 </div>
             </form>
         </div>

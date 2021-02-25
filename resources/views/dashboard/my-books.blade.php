@@ -122,7 +122,7 @@
                     </tr>
 
                     @empty
-                        No books found
+
                     @endforelse
 
 
