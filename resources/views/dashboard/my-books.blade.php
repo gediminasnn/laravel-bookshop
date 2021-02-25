@@ -53,11 +53,25 @@
                         </td>
 
                         <td class="px-1 py-1 ">
-                            {{substr($book->author, 0 , 50)}}
+                            <p class="py-2">
+                                @forelse($book->authors->pluck('name')->toArray() as $genre)
+                                    <span class="px-1 border-gray-700 rounded-full ripple border">{{$genre}}</span>
+                                @empty
+
+                                @endforelse
+                            </p>
+{{--                            {{substr($book->authors(), 0 , 50)}}--}}
                         </td>
 
                         <td class="px-1 py-1 ">
-                            {{substr($book->genre, 0 , 50)}}
+                            <p class="py-2">
+                                @forelse($book->genres->pluck('name')->toArray() as $genre)
+                                <span class="px-1 border-gray-700 rounded-full ripple border">{{$genre}}</span>
+                                @empty
+
+                                @endforelse
+                            </p>
+{{--                            {{substr($book->genres(), 0 , 50)}}--}}
                         </td>
 
                         <td class="px-1 py-1 ">
