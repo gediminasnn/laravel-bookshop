@@ -14,7 +14,7 @@
                 <div class="col-span-5 xl:col-span-1 border-r">
                     <a href="{{route('dashboard.my-books')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.my-books')) bg-blue-50 @endif">My Books</a>
                     <a href="{{route('books.create')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.add-a-book')) bg-blue-50 @endif">Add a Book</a>
-                    <a href="{{route('dashboard.my-comments')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.my-comments')) bg-blue-50 @endif">My Comments</a>
+                    <a href="{{route('dashboard.my-reviews')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.my-reviews')) bg-blue-50 @endif">My Reviews</a>
                     <a href="{{route('dashboard.my-reports')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.my-reports')) bg-blue-50 @endif">My Reports</a>
                     <a href="{{route('dashboard.report-a-book')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.report-a-book')) bg-blue-50 @endif">Report a Book</a>
                     <a href="{{route('dashboard.change-email')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.change-email')) bg-blue-50 @endif">Change email</a>
