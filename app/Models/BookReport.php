@@ -11,4 +11,8 @@ class BookReport extends Model
 
     protected $fillable = ['user_id', 'book_id', 'report'];
 
+    public function book()
+    {
+        return $this->belongsTo(Book::class);
+    }
 }
