@@ -75,7 +75,8 @@ class DashboardController extends Controller
      */
     public function confirmBooks()
     {
-        return response()->view('dashboard.confirm-books');
+        $books = Book::all()->where('status', 0);
+        return response()->view('dashboard.confirm-books', ['books' => $books]);
     }
 
     /**
@@ -85,6 +86,7 @@ class DashboardController extends Controller
      */
     public function reports()
     {
-        return response()->view('dashboard.reports');
+        $reports = BookReport::all()->where('status', 1);
+        return response()->view('dashboard.reports', ['reports' => $reports]);
     }
 }
