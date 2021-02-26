@@ -18,6 +18,7 @@ class CreateBookReportsTable extends Migration
             $table->foreignId('user_id');
             $table->foreignId('book_id');
             $table->text('report');
+            $table->boolean('status');
             $table->timestamps();
         });
     }
