@@ -22,8 +22,8 @@ class BookReportFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => rand(1,50),
-            'book_id' => rand(1,10),
+            'user_id' => rand(1,10),
+            'book_id' => rand(1,50),
             'report' => $this->faker->text(100)
         ];
     }
