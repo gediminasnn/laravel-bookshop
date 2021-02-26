@@ -23,9 +23,14 @@ class BookReportController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
-        return response()->view('reports.create');
+        $id = 0;
+        if($request->has('id'))
+        {
+            $id = $request->input('id');
+        }
+        return response()->view('reports.create', ['id' => $id]);
     }
 
     /**
@@ -95,5 +100,15 @@ class BookReportController extends Controller
         BookReport::find($id)->delete();
 
         return redirect()->back()->with('message', 'Record deleted!');
+    }
+
+    public function close($id)
+    {
+        $book = BookReport::find($id);
+        $book->update([
+            'status' => '0'
+        ]);
+
+        return redirect()->back()->with('message', 'Report closed!');
     }
 }
