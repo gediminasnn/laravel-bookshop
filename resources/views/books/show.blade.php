@@ -65,7 +65,7 @@
                         </p>
 
                         <p><span class="font-medium text-gray-700">Rating : {{$stars}}/5</span></p>
-
+                        <x-a href="{{route('reports.create', ['id' => $book->id])}}">Report</x-a>
                         <p class="pt-10 pr-5 text-xl">{{$book->description}}</p>
                     </div>
 
