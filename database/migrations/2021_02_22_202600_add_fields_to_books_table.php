@@ -15,6 +15,7 @@ class AddFieldsToBooksTable extends Migration
     {
         Schema::table('books', function (Blueprint $table) {
             $table->foreignId('user_id')->constrained();
+            $table->boolean('status')->constrained();
         });
     }
 
