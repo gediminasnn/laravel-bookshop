@@ -11,4 +11,9 @@ class ReplyReport extends Model
 
     protected $fillable = ['book_report_id', 'user_id', 'reply'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
 }

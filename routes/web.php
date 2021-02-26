@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\BookReportController;
+use App\Http\Controllers\ReplyReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,6 +46,17 @@ Route::post('/reviews/create', [ReviewController::class, 'store'])->name('review
 
 Route::post('/reviews/{id}', [ReviewController::class, 'destroy'] )->name('reviews.destroy');
 
+
+Route::get('/reports/create', [BookReportController::class, 'create'])->name('reports.create');
+
+Route::get('/reports/{id}', [BookReportController::class, 'show'])->name('reports.show');
+
+Route::post('/reports/create', [BookReportController::class, 'store'])->name('reports.store');
+
+Route::post('/reports/{id}', [BookReportController::class, 'destroy'] )->name('reports.destroy');
+
+
+Route::post('/reply/create/{id}', [ReplyReportController::class, 'store'])->name('reply.store');
 
 
 Route::get('/dashboard', function () {
