@@ -105,7 +105,12 @@ class BookController extends Controller
 
         $reviews = Review::all()->where('book_id', $id);
         $starsArray = $reviews->pluck('stars')->toArray();
-        $average = round(array_sum($starsArray) / count($starsArray), 2);
+        $average = null;
+        if($starsArray)
+        {
+            $average = round(array_sum($starsArray) / count($starsArray), 2);
+        }
+
 
 //        dd($reviews->user());
 
@@ -210,5 +215,16 @@ class BookController extends Controller
         Book::find($id)->delete();
 
         return redirect()->back()->with('message', 'Record deleted!');
+    }
+
+    public function approve($id)
+    {
+
+        $book = Book::find($id);
+        $book->update([
+            'status' => '1'
+        ]);
+
+        return redirect()->back()->with('message', 'Book approved!');
     }
 }
