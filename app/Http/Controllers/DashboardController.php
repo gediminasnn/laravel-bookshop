@@ -33,7 +33,8 @@ class DashboardController extends Controller
 
     public function myReports(Request $request)
     {
-        return response()->view('dashboard.my-reports');
+        $myReports = BookReport::all()->where('user_id', Auth::user()->id);
+        return response()->view('dashboard.my-reports',['reports' => $myReports]);
     }
 
     /**
