@@ -30,11 +30,18 @@ Route::post('/books/create', [BookController::class, 'store'] )->middleware('aut
 
 Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
 
+
+
 Route::post('/books/{id}', [BookController::class, 'destroy'] )->name('books.destroy');
+
+Route::post('/books/{id}/approve', [BookController::class, 'approve'] )->name('books.approve');
+
 
 Route::get('/books/{id}/edit', [BookController::class, 'edit'] )->name('books.edit');
 
 Route::post('/books/{id}/edit', [BookController::class, 'update'] )->name('books.update');
+
+
 
 
 
@@ -54,6 +61,8 @@ Route::get('/reports/{id}', [BookReportController::class, 'show'])->name('report
 Route::post('/reports/create', [BookReportController::class, 'store'])->name('reports.store');
 
 Route::post('/reports/{id}', [BookReportController::class, 'destroy'] )->name('reports.destroy');
+
+Route::post('/reports/{id}/close', [BookReportController::class, 'close'] )->name('reports.close');
 
 
 Route::post('/reply/create/{id}', [ReplyReportController::class, 'store'])->name('reply.store');
