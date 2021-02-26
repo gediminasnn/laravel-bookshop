@@ -28,6 +28,7 @@ class BookFactory extends Factory
             'price' => rand(100,300),
             'discount' => rand(0,2),
             'user_id' => rand(1,10),
+            'status' => rand(0,1)
         ];
     }
 }
