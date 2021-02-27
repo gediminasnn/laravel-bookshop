@@ -42,7 +42,7 @@ class BookReportController extends Controller
      */
     public function store(Request $request)
     {
-        if(!Book::where($request->book_id)->exist())
+        if(!Book::where($request->book_id))
         {
             return redirect()->back()->with('message', 'Book doesnt exist!');
         }
@@ -70,7 +70,7 @@ class BookReportController extends Controller
         {
             return redirect()->back()->with('message', 'You dont have access to see this report !');
         }
-        $replies = ReplyReport::all()->where('book_report_id', $id);
+        $replies = ReplyReport::with('user')->where('book_report_id', $id)->latest()->get();
         return response()->view('reports.show', [
             'report' => $report,
             'replies' => $replies

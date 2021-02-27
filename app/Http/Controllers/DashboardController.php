@@ -19,7 +19,7 @@ class DashboardController extends Controller
      */
     public function myBooks()
     {
-        $myBooks = Book::all()->where('user_id', auth()->user()->id);
+        $myBooks = Book::with('genres')->with('authors')->where('user_id', auth()->user()->id)->latest()->get();
         return response()->view('dashboard.my-books',['books' => $myBooks]);
     }
 
@@ -30,13 +30,13 @@ class DashboardController extends Controller
      */
     public function myReviews()
     {
-        $myReviews = Review::all()->where('user_id', auth()->user()->id);
+        $myReviews = Review::with('book')->where('user_id', auth()->user()->id)->latest()->get();
         return response()->view('dashboard.my-reviews',['reviews' => $myReviews]);
     }
 
     public function myReports(Request $request)
     {
-        $myReports = BookReport::all()->where('user_id', auth()->user()->id);
+        $myReports = BookReport::latest()->where('user_id', auth()->user()->id)->get();
         return response()->view('dashboard.my-reports',['reports' => $myReports]);
     }
 
@@ -127,9 +127,9 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function confirmBooks()
+    public function approveBooks()
     {
-        return response()->view('dashboard.confirm-books', ['books' => Book::all()->where('status', 0)]);
+        return response()->view('dashboard.approve-books', ['books' => Book::with('authors')->with('genres')->where('status', 0)->latest()->get()]);
     }
 
     /**
@@ -139,6 +139,6 @@ class DashboardController extends Controller
      */
     public function reports()
     {
-        return response()->view('dashboard.reports', ['reports' => BookReport::with('book')->with('user')->get()]);
+        return response()->view('dashboard.reports', ['reports' => BookReport::with('book')->with('user')->latest()->get()]);
     }
 }

@@ -36,7 +36,7 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
-        if(!Book::where($request->get('id'))->exist())
+        if(!Book::where($request->get('id')))
         {
             return redirect()->back()->with('message', 'Book doesnt exist!');
         }

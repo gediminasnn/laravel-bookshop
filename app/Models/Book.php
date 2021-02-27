@@ -32,7 +32,7 @@ class Book extends Model
     {
         if($this->discount > 0)
         {
-            return round($this->price - ($this->discount / 100) * $this->price, 0);
+            return round($this->price - ($this->discount / 100) * $this->price, 0) / 100;
         } else {
             return $this->price;
         }
@@ -41,5 +41,10 @@ class Book extends Model
     public function getIsNewAttribute ()
     {
         return now()->subdays(7) <= $this->created_at;
+    }
+
+    public function getPricePointAttribute ()
+    {
+        return $this->price / 100;
     }
 }

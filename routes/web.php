@@ -24,8 +24,6 @@ Route::get('/', function () {
 
 //Books routes
 Route::name('books.')->group(function() {
-    Route::get('/books', [BookController::class, 'index'])->name('index');
-    Route::get('/books/{id}', [BookController::class, 'show'])->name('show');
 
     Route::group(['middleware' => 'auth'], function() {
         Route::get('/books/create', [BookController::class, 'create'])->name('create');
@@ -35,8 +33,10 @@ Route::name('books.')->group(function() {
         Route::post('/books/{id}', [BookController::class, 'destroy'])->name('destroy');
     });
 
+    Route::get('/books', [BookController::class, 'index'])->name('index');
+    Route::get('/books/{id}', [BookController::class, 'show'])->name('show');
     Route::get('/search', [BookController::class, 'search'])->name('search');
-    Route::post('/books/{id}/approve', [BookController::class, 'approve'])->name('approve');
+    Route::post('/books/{id}/approve', [BookController::class, 'approve'])->middleware('admin')->name('approve');
 });
 
 Route::group(['middleware' => 'auth'], function() {
@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth'], function() {
         Route::get('/change-password', function () {return view('dashboard.change-password');})->name('change-password-view');
         Route::post('/change-password', [DashboardController::class, 'changePassword'])->name('change-password');
         Route::group(['middleware' => 'admin'], function() {
-            Route::get('/confirm-books', [DashboardController::class, 'confirmBooks'])->name('confirm-books');
+            Route::get('/approve-books', [DashboardController::class, 'approveBooks'])->name('approve-books');
             Route::get('/reports', [DashboardController::class, 'reports'])->name('reports');
         });
     });

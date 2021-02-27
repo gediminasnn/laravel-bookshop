@@ -29,10 +29,10 @@
                                     </p>
                                     <p class="mb-2 text-blue-700 text-grey-darker group-hover:text-amazon-orange">By <span class="px-1 border-2 border-blue-700 rounded-full group-hover:border-amazon-orange">{{$book->authors[0]->name}}</span></p>
                                     @if($book->discount)
-                                        <span class="mb-2 text-blue-700 line-through text-grey-darker group-hover:underline group-hover:line-through group-hover:text-amazon-orange">{{$book->price}}$</span>
+                                        <span class="mb-2 text-blue-700 line-through text-grey-darker group-hover:underline group-hover:line-through group-hover:text-amazon-orange">{{$book->price_point}}$</span>
                                         <span class="mb-2 font-bold text-red-600 text-grey-darker group-hover:underline group-hover:text-amazon-orange">{{$book->discounted_price}}$</span>
                                     @elseif(!$book->discount)
-                                        <span class="mb-2 text-blue-700 text-grey-darker group-hover:underline group-hover:text-amazon-orange">{{$book->price}}$</span>
+                                        <span class="mb-2 text-blue-700 text-grey-darker group-hover:underline group-hover:text-amazon-orange">{{$book->price_point}}$</span>
                                     @endif
                                 </div>
                             </a>

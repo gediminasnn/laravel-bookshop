@@ -48,7 +48,7 @@ class BookController extends Controller
         $request->validate(
             [
                 'title' => 'required|string|min:6',
-                'price' => 'required',
+                'price' => 'required|integer',
                 'description' => 'required|string|min:20',
                 'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]

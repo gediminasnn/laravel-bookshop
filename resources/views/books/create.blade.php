@@ -33,7 +33,7 @@
 {{--                    <img src="images/{{ Session::get('file') }}">--}}
 {{--                @endif--}}
 
-            <form method="POST" action="{{route('book.store')}}" enctype="multipart/form-data">
+            <form method="POST" action="{{route('books.store')}}" enctype="multipart/form-data">
                 @csrf
                 <div class="overflow-hidden shadow rounded-md">
                     <div class="px-4 py-5 bg-white sm:p-6">
