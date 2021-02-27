@@ -30,12 +30,9 @@ Route::post('/books/create', [BookController::class, 'store'] )->middleware('aut
 
 Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
 
-
-
 Route::post('/books/{id}', [BookController::class, 'destroy'] )->name('books.destroy');
 
 Route::post('/books/{id}/approve', [BookController::class, 'approve'] )->name('books.approve');
-
 
 Route::get('/books/{id}/edit', [BookController::class, 'edit'] )->name('books.edit');
 
@@ -80,9 +77,17 @@ Route::get('/dashboard/report-a-book',[DashboardController::class, 'reportABook'
 
 Route::get('/dashboard/my-reports',[DashboardController::class, 'myReports'])->middleware(['auth'])->name('dashboard.my-reports');
 
-Route::get('/dashboard/change-email',[DashboardController::class, 'changeEmail'])->middleware(['auth'])->name('dashboard.change-email');
+Route::get('/dashboard/change-email',function () {
+    return view('dashboard.change-email');
+})->middleware(['auth'])->name('dashboard.change-email-view');
 
-Route::get('/dashboard/change-password',[DashboardController::class, 'changePassword'])->middleware(['auth'])->name('dashboard.change-password');
+Route::post('/dashboard/change-email',[DashboardController::class, 'changeEmail'])->middleware(['auth'])->name('dashboard.change-email');
+
+Route::get('/dashboard/change-password',function () {
+    return view('dashboard.change-password');
+})->middleware(['auth'])->name('dashboard.change-password-view');
+
+Route::post('/dashboard/change-password',[DashboardController::class, 'changePassword'])->middleware(['auth'])->name('dashboard.change-password');
 
 Route::get('/dashboard/confirm-books',[DashboardController::class, 'confirmBooks'])->middleware(['auth'])->name('dashboard.confirm-books');
 
