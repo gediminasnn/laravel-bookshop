@@ -22,6 +22,9 @@ Route::get('/', function () {
     return redirect('/books');
 });
 
+
+Route::get('/search', [BookController::class, 'search'] )->name('books.search');
+
 Route::get('/books', [BookController::class, 'index'] )->name('books');
 
 Route::get('/books/create', [BookController::class, 'create'] )->middleware('auth')->name('books.create');

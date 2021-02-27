@@ -12,7 +12,7 @@
             <div class="bg-white overflow-hidden shadow-md sm:rounded-lg">
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5">
-                    @foreach ($books as $book)
+                    @forelse($books as $book)
                         <div class="p-3 bg-white rounded group">
                             <a href="{{route('books.show', ['id' => $book->id])}}" class="">
                                 <img class="rounded" src="{{URL::asset("/images/".$book->cover)}}" alt="Card image cap">
@@ -29,7 +29,9 @@
                                 </div>
                             </a>
                         </div>
-                    @endforeach
+                    @empty
+                        No books found
+                    @endforelse
                 </div>
 
                 {{--PAGINATION--}}

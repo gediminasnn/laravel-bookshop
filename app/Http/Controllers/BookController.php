@@ -217,4 +217,13 @@ class BookController extends Controller
 
         return redirect()->back()->with('message', 'Book approved!');
     }
+
+    public function search(Request $request)
+    {
+
+        return response()->view('books.index', [
+            'books' => $books = Book::where( 'title', 'LIKE', '%' . $request->q . '%' )->where('status', 1)->paginate(10),
+        ]);
+
+    }
 }
