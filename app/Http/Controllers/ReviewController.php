@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\Review;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,10 @@ class ReviewController extends Controller
      */
     public function store(Request $request)
     {
+        if(!Book::where($request->get('id'))->exist())
+        {
+            return redirect()->back()->with('message', 'Book doesnt exist!');
+        }
 
         Review::create([
             'book_id' => $request->get('id'),
@@ -66,6 +71,12 @@ class ReviewController extends Controller
     public function edit($id)
     {
         $review = Review::find($id);
+
+        if($review->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to edit this review!');
+        }
+
         return response()->view('reviews.edit', ['review' => $review]);
     }
 
@@ -80,7 +91,10 @@ class ReviewController extends Controller
     {
         $review = Review::find($id);
 
-
+        if($review->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to update this review!');
+        }
 
         $review->update([
             'stars' => $request->star,
@@ -97,7 +111,13 @@ class ReviewController extends Controller
      */
     public function destroy($id)
     {
-        Review::find($id)->delete();
+        $review = Review::find($id);
+        if($review->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to destroy this review!');
+        }
+
+        $review->delete();
 
         return redirect()->back();
     }

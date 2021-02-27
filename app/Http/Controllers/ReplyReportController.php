@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookReport;
 use App\Models\ReplyReport;
 use Illuminate\Http\Request;
 
@@ -35,6 +36,11 @@ class ReplyReportController extends Controller
      */
     public function store($id, Request $request)
     {
+        $report = BookReport::find($id);
+        if($report->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have privilege to reply this report!');
+        }
         ReplyReport::create([
             'book_report_id' => $id,
             'user_id' => auth()->user()->id,

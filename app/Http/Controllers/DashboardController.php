@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use App\Models\BookReport;
 use App\Models\Review;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -18,7 +19,7 @@ class DashboardController extends Controller
      */
     public function myBooks()
     {
-        $myBooks = Book::all()->where('user_id', Auth::user()->id);
+        $myBooks = Book::all()->where('user_id', auth()->user()->id);
         return response()->view('dashboard.my-books',['books' => $myBooks]);
     }
 
@@ -29,13 +30,13 @@ class DashboardController extends Controller
      */
     public function myReviews()
     {
-        $myReviews = Review::all()->where('user_id', Auth::user()->id);
+        $myReviews = Review::all()->where('user_id', auth()->user()->id);
         return response()->view('dashboard.my-reviews',['reviews' => $myReviews]);
     }
 
     public function myReports(Request $request)
     {
-        $myReports = BookReport::all()->where('user_id', Auth::user()->id);
+        $myReports = BookReport::all()->where('user_id', auth()->user()->id);
         return response()->view('dashboard.my-reports',['reports' => $myReports]);
     }
 
@@ -100,7 +101,7 @@ class DashboardController extends Controller
             ]
         );
 
-        if (!(Hash::check($request->current_password, Auth::user()->password))) {
+        if (!(Hash::check($request->current_password, auth()->user()->password))) {
             return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
         }
 
@@ -113,7 +114,8 @@ class DashboardController extends Controller
         }
 
         //Change Password
-        auth()->user()->update([
+        $user = User::where('email', auth()->user()->email);
+        $user->update([
             'password' => Hash::make($request->new_password)
         ]);
 
@@ -127,8 +129,7 @@ class DashboardController extends Controller
      */
     public function confirmBooks()
     {
-        $books = Book::all()->where('status', 0);
-        return response()->view('dashboard.confirm-books', ['books' => $books]);
+        return response()->view('dashboard.confirm-books', ['books' => Book::all()->where('status', 0)]);
     }
 
     /**
@@ -138,7 +139,6 @@ class DashboardController extends Controller
      */
     public function reports()
     {
-        $reports = BookReport::all()->where('status', 1);
-        return response()->view('dashboard.reports', ['reports' => $reports]);
+        return response()->view('dashboard.reports', ['reports' => BookReport::with('book')->with('user')->get()]);
     }
 }
