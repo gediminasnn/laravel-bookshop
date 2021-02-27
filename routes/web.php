@@ -22,79 +22,54 @@ Route::get('/', function () {
     return redirect('/books');
 });
 
+//Books routes
+Route::group(['name' => 'books'], function() {
+    Route::get('/books', [BookController::class, 'index'])->name('.index');
+    Route::get('/books/{id}', [BookController::class, 'show'])->name('.show');
 
-Route::get('/search', [BookController::class, 'search'] )->name('books.search');
+    Route::group(['middleware' => 'auth'], function() {
+        Route::get('/books/create', [BookController::class, 'create'])->name('.create');
+        Route::post('/books', [BookController::class, 'store'])->name('.store');
+        Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('.edit');
+        Route::post('/books/{id}/edit', [BookController::class, 'update'])->name('.update');
+        Route::post('/books/{id}', [BookController::class, 'destroy'])->name('.destroy');
+    });
 
-Route::get('/books', [BookController::class, 'index'] )->name('books');
+    Route::get('/search', [BookController::class, 'search'])->name('.search');
+    Route::post('/books/{id}/approve', [BookController::class, 'approve'])->name('.approve');
+});
 
-Route::get('/books/create', [BookController::class, 'create'] )->middleware('auth')->name('books.create');
+Route::group(['middleware' => 'auth'], function() {
+//Reviews routes
+    Route::resource('reviews', ReviewController::class);
 
-Route::post('/books/create', [BookController::class, 'store'] )->middleware('auth')->name('book.store');
+//Reports routes
+    Route::resource('reports', BookReportController::class);
+    Route::group(['prefix' => 'reports', 'name' => 'reports'], function () {
+        Route::post('/{id}/close', [BookReportController::class, 'close'])->name('.close');
+    });
 
-Route::get('/books/{id}', [BookController::class, 'show'] )->name('books.show');
+//Replies routes
+    Route::group(['prefix' => 'reply', 'name' => 'reply'], function () {
+        Route::post('/create/{id}', [ReplyReportController::class, 'store'])->name('.store');
+    });
 
-Route::post('/books/{id}', [BookController::class, 'destroy'] )->name('books.destroy');
-
-Route::post('/books/{id}/approve', [BookController::class, 'approve'] )->name('books.approve');
-
-Route::get('/books/{id}/edit', [BookController::class, 'edit'] )->name('books.edit');
-
-Route::post('/books/{id}/edit', [BookController::class, 'update'] )->name('books.update');
-
-
-
-
-
-Route::get('/reviews/{id}/edit', [ReviewController::class, 'edit'])->name('reviews.edit');
-
-Route::post('/reviews/{id}/edit', [ReviewController::class, 'update'])->name('reviews.update');
-
-Route::post('/reviews/create', [ReviewController::class, 'store'])->name('reviews.store');
-
-Route::post('/reviews/{id}', [ReviewController::class, 'destroy'] )->name('reviews.destroy');
-
-
-Route::get('/reports/create', [BookReportController::class, 'create'])->name('reports.create');
-
-Route::get('/reports/{id}', [BookReportController::class, 'show'])->name('reports.show');
-
-Route::post('/reports/create', [BookReportController::class, 'store'])->name('reports.store');
-
-Route::post('/reports/{id}', [BookReportController::class, 'destroy'] )->name('reports.destroy');
-
-Route::post('/reports/{id}/close', [BookReportController::class, 'close'] )->name('reports.close');
-
-
-Route::post('/reply/create/{id}', [ReplyReportController::class, 'store'])->name('reply.store');
-
-
-Route::get('/dashboard', function () {
-    return redirect('/dashboard/my-books');
-})->middleware(['auth'])->name('dashboard');
-
-Route::get('/dashboard/my-books',[DashboardController::class, 'myBooks'])->middleware(['auth'])->name('dashboard.my-books');
-
-Route::get('/dashboard/my-reviews',[DashboardController::class, 'myReviews'])->middleware(['auth'])->name('dashboard.my-reviews');
-
-Route::get('/dashboard/report-a-book',[DashboardController::class, 'reportABook'])->middleware(['auth'])->name('dashboard.report-a-book');
-
-Route::get('/dashboard/my-reports',[DashboardController::class, 'myReports'])->middleware(['auth'])->name('dashboard.my-reports');
-
-Route::get('/dashboard/change-email',function () {
-    return view('dashboard.change-email');
-})->middleware(['auth'])->name('dashboard.change-email-view');
-
-Route::post('/dashboard/change-email',[DashboardController::class, 'changeEmail'])->middleware(['auth'])->name('dashboard.change-email');
-
-Route::get('/dashboard/change-password',function () {
-    return view('dashboard.change-password');
-})->middleware(['auth'])->name('dashboard.change-password-view');
-
-Route::post('/dashboard/change-password',[DashboardController::class, 'changePassword'])->middleware(['auth'])->name('dashboard.change-password');
-
-Route::get('/dashboard/confirm-books',[DashboardController::class, 'confirmBooks'])->middleware(['auth'])->name('dashboard.confirm-books');
-
-Route::get('/dashboard/reports',[DashboardController::class, 'reports'])->middleware(['auth'])->name('dashboard.reports');
-
+//Dashboard routes
+    Route::group(['prefix' => 'dashboard','name' => 'dashboard'], function () {
+        Route::get('/', function () { return redirect('/dashboard/my-books'); });
+        Route::get('/my-books', [DashboardController::class, 'myBooks'])->name('.my-books');
+        Route::get('/my-reviews', [DashboardController::class, 'myReviews'])->name('.my-reviews');
+        Route::get('/report-a-book', [DashboardController::class, 'reportABook'])->name('.report-a-book');
+        Route::get('/my-reports', [DashboardController::class, 'myReports'])->name('.my-reports');
+        Route::get('/change-email', function () {return view('dashboard.change-email');})->name('.change-email-view');
+        Route::post('/change-email', [DashboardController::class, 'changeEmail'])->name('.change-email');
+        Route::get('/change-password', function () {return view('dashboard.change-password');})->name('.change-password-view');
+        Route::post('/change-password', [DashboardController::class, 'changePassword'])->name('.change-password');
+        Route::group(['middleware' => 'admin'], function() {
+            Route::get('/confirm-books', [DashboardController::class, 'confirmBooks'])->name('.confirm-books');
+            Route::get('/reports', [DashboardController::class, 'reports'])->name('.reports');
+        });
+    });
+});
 
 require __DIR__.'/auth.php';
