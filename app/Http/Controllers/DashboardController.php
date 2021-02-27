@@ -7,6 +7,7 @@ use App\Models\BookReport;
 use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class DashboardController extends Controller
 {
@@ -53,9 +54,35 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function changeEmail()
+    public function changeEmail(Request $request)
     {
-        return response()->view('dashboard.change-email');
+        $request->validate(
+            [
+                'new_email' => 'required|string|min:6',
+                'retype_new_email' => 'required|string|min:6',
+                'current_password' => 'required'
+            ]
+        );
+
+        if (!(Hash::check($request->current_password, auth()->user()->password))) {
+            return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+        }
+
+        if(strcmp(auth()->user()->email, $request->new_email) == 0){
+            return redirect()->back()->with("error","New email cannot be same as your current email. Please choose a different email.");
+        }
+
+        if(strcmp($request->new_email, $request->retype_new_email) != 0){
+            return redirect()->back()->with("error","New email must be the same as your retype new email.");
+        }
+
+
+        //Change Email
+        auth()->user()->update([
+            'email' => $request->new_email
+        ]);
+
+        return redirect()->back()->with('error', 'Email changed!');
     }
 
     /**
