@@ -15,8 +15,8 @@ class CreateReplyReportsTable extends Migration
     {
         Schema::create('reply_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('book_report_id');
-            $table->foreignId('user_id');
+            $table->foreignId('book_report_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('reply');
             $table->timestamps();
         });

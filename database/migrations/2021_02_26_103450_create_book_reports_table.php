@@ -15,8 +15,8 @@ class CreateBookReportsTable extends Migration
     {
         Schema::create('book_reports', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id');
-            $table->foreignId('book_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('book_id')->constrained()->onDelete('cascade');
             $table->text('report');
             $table->boolean('status');
             $table->timestamps();
