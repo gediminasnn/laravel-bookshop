@@ -63,9 +63,34 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function changePassword()
+    public function changePassword(Request $request)
     {
-        return response()->view('dashboard.change-password');
+        $request->validate(
+            [
+                'current_password' => 'required',
+                'new_password' => 'required|string|min:6',
+                'retype_new_password' => 'required|string|min:6'
+            ]
+        );
+
+        if (!(Hash::check($request->current_password, Auth::user()->password))) {
+            return redirect()->back()->with("error","Your current password does not matches with the password you provided. Please try again.");
+        }
+
+        if(strcmp($request->current_password, $request->new_password) == 0){
+            return redirect()->back()->with("error","New Password cannot be same as your current password. Please choose a different password.");
+        }
+
+        if(strcmp($request->new_password, $request->retype_new_password) != 0){
+            return redirect()->back()->with("error","New Password must be the same as your retype new password.");
+        }
+
+        //Change Password
+        auth()->user()->update([
+            'password' => Hash::make($request->new_password)
+        ]);
+
+        return redirect()->back()->with('error', 'Password changed!');
     }
 
     /**
