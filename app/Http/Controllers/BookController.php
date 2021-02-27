@@ -20,19 +20,9 @@ class BookController extends Controller
      */
     public function index(Request $request)
     {
-        $currentPage = 1;
-        if ($request->input('page')) {
-            $currentPage = $request->input('page');
-        }
-
-        $books = Book::all();
-        return response()->view('books.index',
-                                [
-                                    'books' => Book::all(),
-                                    'previousPage' => $currentPage - 1,
-                                    'nextPage' => $currentPage + 1
-                                ]
-        );
+        return response()->view('books.index', [
+            'books' => Book::where('status', 1)->paginate(25),
+        ]);
     }
 
 
