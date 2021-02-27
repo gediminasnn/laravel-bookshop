@@ -7,6 +7,7 @@ use App\Models\Book;
 use App\Models\Genre;
 use App\Models\Review;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -21,7 +22,7 @@ class BookController extends Controller
     public function index(Request $request)
     {
         return response()->view('books.index', [
-            'books' => Book::where('status', 1)->paginate(25),
+            'books' => Book::with('authors')->approved()->latest()->paginate(25),
         ]);
     }
 
@@ -33,8 +34,7 @@ class BookController extends Controller
      */
     public function create()
     {
-        $genres = Genre::all();
-        return response()->view('books.create', ['genres' => $genres]);
+        return response()->view('books.create', ['genres' => Genre::all()]);
     }
 
     /**
@@ -47,6 +47,9 @@ class BookController extends Controller
     {
         $request->validate(
             [
+                'title' => 'required|string|min:6',
+                'price' => 'required',
+                'description' => 'required|string|min:20',
                 'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]
         );
@@ -69,7 +72,7 @@ class BookController extends Controller
             'price' => $request->price,
             'discount' => $discount,
             'description' => $request->description,
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->user()->id,
             'cover' => $fileName
             ]);
 
@@ -81,7 +84,7 @@ class BookController extends Controller
         $book->genres()->sync($request->genre);
         $book->authors()->sync($author_id);
 
-        return redirect()->back()->with('message', 'IT WORKS!');
+        return redirect()->back()->with('message', 'Book created!');
     }
 
     /**m
@@ -92,17 +95,13 @@ class BookController extends Controller
      */
     public function show($id)
     {
-
-        $reviews = Review::all()->where('book_id', $id);
+        $reviews = Review::with('user')->where('book_id', $id)->get();
         $starsArray = $reviews->pluck('stars')->toArray();
         $average = null;
         if($starsArray)
         {
             $average = round(array_sum($starsArray) / count($starsArray), 2);
         }
-
-
-//        dd($reviews->user());
 
         return response()->view('books.show', [
             'book' => Book::find($id),
@@ -148,15 +147,17 @@ class BookController extends Controller
     public function update($id, Request $request)
     {
         $book = Book::find($id);
-//        dd($book);
 
-        if(Auth::user()->id !== $book->user_id)
+        if($book->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
         {
             return redirect()->back()->with('message', 'You dont have access to change this book !');
         }
 
         $request->validate(
             [
+                'title' => 'required|string|min:6',
+                'price' => 'required',
+                'description' => 'required|string|min:20',
                 'file-upload' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048'
             ]
         );
@@ -179,7 +180,7 @@ class BookController extends Controller
             'price' => $request->price,
             'discount' => $discount,
             'description' => $request->description,
-            'user_id' => Auth::user()->id,
+            'user_id' => auth()->user()->id,
             'cover' => $fileName
         ]);
 
@@ -202,28 +203,32 @@ class BookController extends Controller
      */
     public function destroy($id)
     {
-        Book::find($id)->delete();
-
-        return redirect()->back()->with('message', 'Record deleted!');
+        $book = Book::find($id);
+        if($book->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to destroy this book !');
+        }
+        $book->delete();
+        return redirect(route('books.index'))->with('message', 'Book deleted!');
     }
 
     public function approve($id)
     {
-
+        if(auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to approve this book !');
+        }
         $book = Book::find($id);
         $book->update([
             'status' => '1'
         ]);
-
         return redirect()->back()->with('message', 'Book approved!');
     }
 
     public function search(Request $request)
     {
-
         return response()->view('books.index', [
-            'books' => $books = Book::where( 'title', 'LIKE', '%' . $request->q . '%' )->where('status', 1)->paginate(10),
+            'books' => $books = Book::approved()->where( 'title', 'LIKE', '%' . $request->q . '%' )->paginate(10),
         ]);
-
     }
 }
