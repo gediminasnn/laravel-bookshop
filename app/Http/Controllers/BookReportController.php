@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use App\Models\BookReport;
 use App\Models\ReplyReport;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class BookReportController extends Controller
      */
     public function create(Request $request)
     {
-        $id = 0;
+        $id = null;
         if($request->has('id'))
         {
             $id = $request->input('id');
@@ -41,6 +42,11 @@ class BookReportController extends Controller
      */
     public function store(Request $request)
     {
+        if(!Book::where($request->book_id)->exist())
+        {
+            return redirect()->back()->with('message', 'Book doesnt exist!');
+        }
+
         BookReport::create([
             'user_id' => auth()->user()->id,
             'book_id' => $request->book_id,
@@ -59,6 +65,11 @@ class BookReportController extends Controller
     public function show($id)
     {
         $report = BookReport::findOrFail($id);
+
+        if($report->user_id != auth()->user()->id && auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to see this report !');
+        }
         $replies = ReplyReport::all()->where('book_report_id', $id);
         return response()->view('reports.show', [
             'report' => $report,
@@ -97,9 +108,13 @@ class BookReportController extends Controller
      */
     public function destroy($id)
     {
-        BookReport::find($id)->delete();
-
-        return redirect()->back()->with('message', 'Record deleted!');
+        $report = BookReport::findOrFail($id);
+        if(auth()->user()->is_admin == 0)
+        {
+            return redirect()->back()->with('message', 'You dont have access to destroy this book !');
+        }
+        $report->delete();
+        return redirect()->back()->with('message', 'Report deleted!');
     }
 
     public function close($id)
