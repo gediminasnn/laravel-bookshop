@@ -23,51 +23,53 @@ Route::get('/', function () {
 });
 
 //Books routes
-Route::group(['name' => 'books'], function() {
-    Route::get('/books', [BookController::class, 'index'])->name('.index');
-    Route::get('/books/{id}', [BookController::class, 'show'])->name('.show');
+Route::name('books.')->group(function() {
+    Route::get('/books', [BookController::class, 'index'])->name('index');
+    Route::get('/books/{id}', [BookController::class, 'show'])->name('show');
 
     Route::group(['middleware' => 'auth'], function() {
-        Route::get('/books/create', [BookController::class, 'create'])->name('.create');
-        Route::post('/books', [BookController::class, 'store'])->name('.store');
-        Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('.edit');
-        Route::post('/books/{id}/edit', [BookController::class, 'update'])->name('.update');
-        Route::post('/books/{id}', [BookController::class, 'destroy'])->name('.destroy');
+        Route::get('/books/create', [BookController::class, 'create'])->name('create');
+        Route::post('/books', [BookController::class, 'store'])->name('store');
+        Route::get('/books/{id}/edit', [BookController::class, 'edit'])->name('edit');
+        Route::post('/books/{id}/edit', [BookController::class, 'update'])->name('update');
+        Route::post('/books/{id}', [BookController::class, 'destroy'])->name('destroy');
     });
 
-    Route::get('/search', [BookController::class, 'search'])->name('.search');
-    Route::post('/books/{id}/approve', [BookController::class, 'approve'])->name('.approve');
+    Route::get('/search', [BookController::class, 'search'])->name('search');
+    Route::post('/books/{id}/approve', [BookController::class, 'approve'])->name('approve');
 });
 
 Route::group(['middleware' => 'auth'], function() {
-//Reviews routes
+    //Reviews routes
+
     Route::resource('reviews', ReviewController::class);
 
-//Reports routes
+    //Reports routes
+    Route::name('reports.')->prefix('reports')->group(function () {
+        Route::post('/{id}/close', [BookReportController::class, 'close'])->middleware('admin')->name('close');
+        Route::post('/{id}', [BookReportController::class, 'destroy'])->middleware('admin')->name('destroy');
+    });
     Route::resource('reports', BookReportController::class);
-    Route::group(['prefix' => 'reports', 'name' => 'reports'], function () {
-        Route::post('/{id}/close', [BookReportController::class, 'close'])->name('.close');
+
+    //Replies routes
+    Route::name('reply.')->prefix('reply')->group(function () {
+        Route::post('/create/{id}', [ReplyReportController::class, 'store'])->name('store');
     });
 
-//Replies routes
-    Route::group(['prefix' => 'reply', 'name' => 'reply'], function () {
-        Route::post('/create/{id}', [ReplyReportController::class, 'store'])->name('.store');
-    });
-
-//Dashboard routes
-    Route::group(['prefix' => 'dashboard','name' => 'dashboard'], function () {
-        Route::get('/', function () { return redirect('/dashboard/my-books'); });
-        Route::get('/my-books', [DashboardController::class, 'myBooks'])->name('.my-books');
-        Route::get('/my-reviews', [DashboardController::class, 'myReviews'])->name('.my-reviews');
-        Route::get('/report-a-book', [DashboardController::class, 'reportABook'])->name('.report-a-book');
-        Route::get('/my-reports', [DashboardController::class, 'myReports'])->name('.my-reports');
-        Route::get('/change-email', function () {return view('dashboard.change-email');})->name('.change-email-view');
-        Route::post('/change-email', [DashboardController::class, 'changeEmail'])->name('.change-email');
-        Route::get('/change-password', function () {return view('dashboard.change-password');})->name('.change-password-view');
-        Route::post('/change-password', [DashboardController::class, 'changePassword'])->name('.change-password');
+    //Dashboard routes
+    Route::get('/', function () { return redirect('/dashboard/my-books'); })->name('dashboard');
+    Route::name('dashboard.')->prefix('dashboard')->group(function () {
+        Route::get('/my-books', [DashboardController::class, 'myBooks'])->name('my-books');
+        Route::get('/my-reviews', [DashboardController::class, 'myReviews'])->name('my-reviews');
+        Route::get('/report-a-book', [DashboardController::class, 'reportABook'])->name('report-a-book');
+        Route::get('/my-reports', [DashboardController::class, 'myReports'])->name('my-reports');
+        Route::get('/change-email', function () {return view('dashboard.change-email');})->name('change-email-view');
+        Route::post('/change-email', [DashboardController::class, 'changeEmail'])->name('change-email');
+        Route::get('/change-password', function () {return view('dashboard.change-password');})->name('change-password-view');
+        Route::post('/change-password', [DashboardController::class, 'changePassword'])->name('change-password');
         Route::group(['middleware' => 'admin'], function() {
-            Route::get('/confirm-books', [DashboardController::class, 'confirmBooks'])->name('.confirm-books');
-            Route::get('/reports', [DashboardController::class, 'reports'])->name('.reports');
+            Route::get('/confirm-books', [DashboardController::class, 'confirmBooks'])->name('confirm-books');
+            Route::get('/reports', [DashboardController::class, 'reports'])->name('reports');
         });
     });
 });
