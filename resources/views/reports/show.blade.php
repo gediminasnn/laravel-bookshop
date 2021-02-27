@@ -16,6 +16,11 @@
 {{--                    @if(!Auth::guest())--}}
 {{--                        @if($book->user_id == auth()->user()->id)--}}
                         <div class="col-span2 md:col-span-6">
+                            @if(session()->has('message'))
+                                <div class="alert alert-success">
+                                    {{ session()->get('message') }}
+                                </div>
+                            @endif
                             <div class="flex justify-start space-x-1 col-span-2 md:col-span-6 p-5 bg-white border-b border-gray-200">
                                 <x-a href="{{route('dashboard.my-reports')}}">Dashboard</x-a>
 {{--                                <a href="{{route("books.edit", $book->id)}}" class="border-2 border-indigo-200 rounded-md p-2">--}}

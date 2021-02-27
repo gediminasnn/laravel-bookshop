@@ -36,7 +36,7 @@
                             <div class="col-span-4 sm:col-span-1">
                                 <div class="flex inline-flex gap-2 pb-2">
                                     <x-a href="{{route('dashboard.my-reports')}}">Dashboard</x-a>
-                                    @if($id > 0)
+                                    @if($id)
                                     <x-a href="{{route('books.show', ['id' => $id])}}" class="">Back to book</x-a>
                                     @endif
                                 </div>

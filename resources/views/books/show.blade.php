@@ -13,8 +13,15 @@
             <div class="bg-white overflow-hidden shadow-md sm:rounded-lg">
 
                 <div class="grid grid-cols-2 md:grid-cols-6">
-                    @if(!Auth::guest())
-                        @if($book->user_id == auth()->user()->id)
+
+                    @if(session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
+
+                    @if(!auth()->guest())
+                        @if($book->user_id == auth()->user()->id || auth()->user()->is_admin == 1)
                         <div class="col-span2 md:col-span-6">
                             <div class="flex justify-start space-x-1 col-span-2 md:col-span-6 p-5 bg-white border-b border-gray-200">
                                 <x-a href="{{route('dashboard')}}">Dashboard</x-a>
@@ -80,8 +87,8 @@
                         <p class="py-2">
                             <span class="text-xl px-2 border-gray-700 rounded-full shadow ripple border-2">{{$review->user->name}}</span>
                             Stars : {{$review->stars}}
-                        @if(!Auth::guest())
-                            @if($review->user_id === auth()->user()->id)
+                        @if(!auth()->guest())
+                            @if($review->user_id === auth()->user()->id || auth()->user()->is_admin == 1)
                                 <div class="flex justify-start space-x-1">
                                     <a href="{{route("reviews.edit", $review->id)}}" class="border-2 border-indigo-200 rounded-md p-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-4 w-4 text-gray-500">

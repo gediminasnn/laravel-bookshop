@@ -19,7 +19,7 @@
                     <a href="{{route('reports.create')}}" class="block px-10 py-5 border-b hover:bg-blue-50 ">Report a Book</a>
                     <a href="{{route('dashboard.change-email')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.change-email')) bg-blue-50 @endif">Change email</a>
                     <a href="{{route('dashboard.change-password')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.change-password')) bg-blue-50 @endif">Change Password</a>
-                    @if(Auth::user()->is_admin)
+                    @if(auth()->user()->is_admin)
                     <a href="{{route('dashboard.confirm-books')}}" class="block px-10 py-5 border-b border-t-2 hover:bg-blue-50 @if(request()->routeIs('dashboard.confirm-books')) bg-blue-50 @endif">Confirm Books</a>
                     <a href="{{route('dashboard.reports')}}" class="block px-10 py-5 border-b hover:bg-blue-50 @if(request()->routeIs('dashboard.reports')) bg-blue-50 @endif">Reports</a>
                     @endif
