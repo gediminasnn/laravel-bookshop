@@ -22,6 +22,10 @@ Route::get('/', function () {
     return redirect('/books');
 });
 
+Route::get('/vue', function () {
+    return view('vue');
+});
+
 //Books routes
 Route::name('books.')->group(function() {
 
