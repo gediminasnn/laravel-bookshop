@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BookApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +15,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('v1/books', BookApiController::class);
+
 Route::middleware('auth:api')->get('/dashboard', function (Request $request) {
     return $request->user();
 });
+
+
+
+
