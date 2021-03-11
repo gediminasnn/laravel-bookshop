@@ -7,7 +7,7 @@ export default {
     data(){
     },
     mounted(){
-        console.log('Working vue thanks Edvinas!');
+        console.log('Working vue thanks Edvinas!!!');
     }
 }
 </script>
