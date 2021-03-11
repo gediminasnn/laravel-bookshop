@@ -15,7 +15,8 @@ class BookApiController extends Controller
      */
     public function index()
     {
-        return new BookResource(Book::with('authors')->approved()->latest()->paginate(25));
+        $books = Book::with(['authors','genres'])->approved()->latest()->paginate(25);
+        return BookResource::collection($books);
     }
 
     /**
@@ -35,9 +36,10 @@ class BookApiController extends Controller
      * @param  \App\Models\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Book $book)
+    public function show($id)
     {
-        //
+        $book = Book::with(['authors','genres'])->findOrFail($id);
+        return new BookResource($book);
     }
 
     /**

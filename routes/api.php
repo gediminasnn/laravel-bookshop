@@ -15,7 +15,7 @@ use App\Http\Controllers\BookApiController;
 |
 */
 
-Route::apiResource('v1/books', BookApiController::class);
+Route::apiResource('v1/books', BookApiController::class)->only(['index', 'show']);
 
 Route::middleware('auth:api')->get('/dashboard', function (Request $request) {
     return $request->user();

@@ -9,13 +9,14 @@
 </head>
 
 <body>
-{{--    <div id="app">--}}
-{{--        <posts-index></posts-index>--}}
-{{--    </div>--}}
-
 <div id="app">
-    <app></app>
+    <post-index></post-index>
 </div>
+
+
+{{--<div id="app">--}}
+{{--    <app></app>--}}
+{{--</div>--}}
 
 <script src="{{ mix('js/app.js') }}"></script>
 

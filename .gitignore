@@ -2,6 +2,7 @@
 /public/hot
 /public/storage
 /.idea
+/.vscode
 /public/images
 /public/js
 /public/css
